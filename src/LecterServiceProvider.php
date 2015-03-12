@@ -19,7 +19,7 @@ class LecterServiceProvider extends ServiceProvider {
      */
     public function boot()
     {
-        $this->app->singleton('lecter', function ($app) {
+        $this->app->singleton('lecter', function () {
             return new Lecter();
         });
 
