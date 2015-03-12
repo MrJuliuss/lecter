@@ -5,6 +5,7 @@ namespace MrJuliuss\Lecter\Http\Controllers;
 use Illuminate\Routing\Controller;
 use MrJuliuss\Lecter\Facades\Lecter;
 use Illuminate\Support\Facades\Storage;
+use Config;
 
 /**
  * This is the log viewer controller class.
@@ -20,6 +21,9 @@ class LecterController extends Controller
      */
     public function getIndex($any = '')
     {
+        // Wiki prefix uri
+        $prefix = Config::get('lecter.uri');
+
         // Create the wiki content directory if it does not exists
         if(Storage::exists('wiki') === false) {
             Storage::makeDirectory('wiki');
@@ -29,13 +33,13 @@ class LecterController extends Controller
         $navBar = Lecter::getNavBar(storage_path().'/app/wiki');
 
         // Get the breadcrumbs
-        $breadcrumbs = Lecter::getBreadCrumbs($any);
+        $breadcrumbs = Lecter::getBreadCrumbs($any, $prefix);
 
         $any = 'wiki/'.$any;
         // Get file content
         $content = Lecter::getPageContent($any);
 
-        $directoryContent = Lecter::getDirectoryContent($any);
+        $directoryContent = Lecter::getDirectoryContent($any, $prefix);
 
         return view('lecter::index', [
             'files' => $directoryContent['files'],
@@ -43,7 +47,7 @@ class LecterController extends Controller
             'content' => $content,
             'breadcrumbs' => $breadcrumbs,
             'navBar' => $navBar,
-            'root' => '',
+            'root' => $prefix,
         ]);
     }
 }

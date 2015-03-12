@@ -1,3 +1,9 @@
 <?php
 
-return [];
+return [
+
+    /**
+     * This define the lecter location.
+     */
+    'uri' => ''
+];

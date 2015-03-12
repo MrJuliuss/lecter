@@ -9,7 +9,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="/">Wiki</a>
+        <a class="navbar-brand" href="{{ url(Config::get('lecter.uri'), [], null) }}">Wiki</a>
     </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -23,14 +23,14 @@
     <div class="content">
         <ol class="breadcrumb">
             <li class="{{ empty($breadcrumbs) ? 'active' : '' }}">
-                <a href="/">Home</a>
+                <a href="{{ url(Config::get('lecter.uri')) }}">Home</a>
             </li>
             @foreach($breadcrumbs as $breadcrumb)
                 <li class="{{ $breadcrumb['active'] == true ? 'active' : '' }}">
                     @if($breadcrumb['active'] === true)
                         {{ $breadcrumb['name'] }}
                     @else
-                        <a href="{{ $breadcrumb['link'] }}">{{ $breadcrumb['name'] }}</a>
+                        <a href="{{ url($breadcrumb['link']) }}">{{ $breadcrumb['name'] }}</a>
                     @endif
                 </li>
             @endforeach
@@ -42,14 +42,14 @@
                     @foreach($files as $file)
                         <li class="list-group-item">
                             <i class="glyphicon glyphicon-file"></i>
-                            <a href="{{ $file['link'] }}">{{ $file['name'] }}</a>
+                            <a href="{{ url($file['link']) }}">{{ $file['name'] }}</a>
                         </li>
                     @endforeach
 
                     @foreach($directories as $directory)
                         <li class="list-group-item">
                             <i class="glyphicon glyphicon-folder-open"></i>
-                            <a href="{{ $directory['link'] }}">{{ $directory['name'] }}</a>
+                            <a href="{{ url($directory['link']) }}">{{ $directory['name'] }}</a>
                         </li>
                     @endforeach
                 </ul>

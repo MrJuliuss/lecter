@@ -57,14 +57,14 @@ class Lecter
      * @param  string $path path to format to breadcrumbs
      * @return array [description]
      */
-    public function getBreadCrumbs($path)
+    public function getBreadCrumbs($path, $prefix)
     {
         $explodedPath = explode('/', $path);
         $breadcrumbs = [];
 
         if(!empty($explodedPath)) {
             $number = count($explodedPath);
-            $link = '';
+            $link = $prefix;
 
             foreach ($explodedPath as $key => $breadcrumb) {
                 if($breadcrumb !== '') {
@@ -103,7 +103,7 @@ class Lecter
      * @param  string $path path to scan
      * @return array
      */
-    public function getDirectoryContent($path)
+    public function getDirectoryContent($path, $prefix)
     {
         $d = Storage::directories($path);
         $f = Storage::files($path);
@@ -123,7 +123,7 @@ class Lecter
                 unset($exp[0]);
             }
 
-            $link = implode('/', $exp);
+            $link = $prefix.'/'.implode('/', $exp);
             $files[] = [
                 'name' => explode('.', $name)[0],
                 'link' => $link,
@@ -139,7 +139,7 @@ class Lecter
                 unset($exp[0]);
             }
 
-            $link = implode('/', $exp);
+            $link = $prefix.'/'.implode('/', $exp);
             $directories[] = [
                 'name' => $name,
                 'link' => $link

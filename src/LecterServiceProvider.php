@@ -39,6 +39,13 @@ class LecterServiceProvider extends ServiceProvider {
 
     protected function setupPackage()
     {
+        $config = realpath(__DIR__.'/../config/lecter.php');
+        $this->mergeConfigFrom($config, 'lecter');
+
+        $this->publishes([
+            $config => config_path('lecter.php'),
+        ]);
+
         $this->publishes([
             __DIR__.'/../assets/css/' => public_path('css/mrjuliuss/lecter'),
         ], 'public');
