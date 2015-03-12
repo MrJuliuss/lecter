@@ -5,5 +5,10 @@ return [
     /**
      * This define the lecter location.
      */
-    'uri' => ''
+    'uri' => '',
+
+    /**
+     * Lecter app name
+     */
+    'app_name' => 'Lecter',
 ];
