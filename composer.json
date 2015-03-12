@@ -1,0 +1,20 @@
+{
+    "name": "mrjuliuss/lecter",
+    "description": "Lecter, a flat file wiki built with Laravel 5",
+    "keywords": ["laravel","flat","markdown", "wiki"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Julien Richarte",
+            "email": "julien.richarte@gmail.com"
+        }
+    ],
+    "require": {
+        "erusev/parsedown-extra": "~0.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "MrJuliuss\\Lecter\\": "src/"
+        }
+    }
+}
