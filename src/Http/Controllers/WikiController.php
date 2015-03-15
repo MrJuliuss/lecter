@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Storage;
 use Config;
 
 /**
- * This is the log viewer controller class.
+ * This is the wiki controller class.
  *
  * @author Julien Richarte <julien.richarte@gmail.com>
  */
-class LecterController extends Controller
+class WikiController extends Controller
 {
     /**
      * Redirect to the main page.
@@ -41,7 +41,7 @@ class LecterController extends Controller
 
         $directoryContent = Lecter::getDirectoryContent($any, $prefix);
 
-        return view('lecter::index', [
+        return view('lecter::controllers.wiki.index', [
             'files' => $directoryContent['files'],
             'directories' => $directoryContent['directories'],
             'content' => $content,
