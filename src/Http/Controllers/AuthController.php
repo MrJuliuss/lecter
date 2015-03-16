@@ -1,10 +1,12 @@
-<?php 
+<?php
 
 namespace MrJuliuss\Lecter\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Contracts\Auth\Registrar;
+use Illuminate\Http\Request;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
 /**
  * This is the authentication controller class.
@@ -12,6 +14,8 @@ use Illuminate\Contracts\Auth\Registrar;
  * @author Julien Richarte <julien.richarte@gmail.com>
  */
 class AuthController extends Controller {
+
+    use ValidatesRequests;
 
     /**
      * The Guard implementation.
@@ -53,7 +57,22 @@ class AuthController extends Controller {
      */
     public function postLogin(Request $request)
     {
+        $this->validate($request, [
+            'email' => 'required|email', 'password' => 'required',
+        ]);
 
+        $credentials = $request->only('email', 'password');
+
+        if ($this->auth->attempt($credentials, $request->has('remember')))
+        {
+            return redirect()->intended($this->redirectPath());
+        }
+
+        return redirect('auth/login')
+            ->withInput($request->only('email', 'remember'))
+            ->withErrors([
+                'email' => 'Sorry, login failed... check your credentials.',
+            ]);
     }
 
     /**
