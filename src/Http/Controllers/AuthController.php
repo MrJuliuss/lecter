@@ -4,7 +4,6 @@ namespace MrJuliuss\Lecter\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Auth\Guard;
-use Illuminate\Contracts\Auth\Registrar;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 
@@ -31,12 +30,10 @@ class AuthController extends Controller {
      * @param  \Illuminate\Contracts\Auth\Registrar  $registrar
      * @return void
      */
-    public function __construct(Guard $auth, Registrar $registrar)
+    public function __construct(Guard $auth)
     {
         $this->auth = $auth;
-        $this->registrar = $registrar;
-
-        $this->middleware('guest', ['except' => 'getLogout']);
+        $this->middleware('lecter.guest', ['except' => 'getLogout']);
     }
 
     /**
@@ -65,7 +62,7 @@ class AuthController extends Controller {
 
         if ($this->auth->attempt($credentials, $request->has('remember')))
         {
-            return redirect()->intended($this->redirectPath());
+            return redirect()->intended('/'.Config::get('lecter.uri'));
         }
 
         return redirect('auth/login')
