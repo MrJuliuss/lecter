@@ -6,6 +6,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Config;
 
 /**
  * This is the authentication controller class.

@@ -9,14 +9,20 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="{{ url(Config::get('lecter.uri'), [], null) }}">{{ Config::get('lecter.app_name') }}</a>
+        <a class="navbar-brand" href="{{ url(Config::get('lecter.uri')) }}">{{ Config::get('lecter.app_name') }}</a>
     </div>
 
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav multi-level">
-                @include('lecter::partials.nav', ['navBar' => $navBar, 'root' => $root])
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav multi-level">
+            @include('lecter::partials.nav', ['navBar' => $navBar, 'root' => $root])
+        </ul>
+
+        @if(Auth::check())
+            <ul class="nav navbar-nav navbar-right">
+                <li><a title="Logout" href="{{ url('auth/logout') }}"><i class="glyphicon glyphicon-share-alt"></i> <span class="text">Logout</span></a></li>
             </ul>
-        </div>
+        @endif
+    </div>
 </nav>
 
 <div class="container">
