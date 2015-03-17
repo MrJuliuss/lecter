@@ -13,5 +13,5 @@ $router->controllers([
 $router->group($groupConfig, function($router)
 {
     $router->get('/', ['as' => 'lecter.index', 'uses' => 'WikiController@getIndex']);
-    $router->get('{any}', ['as' => 'lecter.index', 'uses' => 'WikiController@getIndex'])->where('any', '.*');
+    $router->get('{any}', ['uses' => 'WikiController@getIndex'])->where('any', '.*');
 });

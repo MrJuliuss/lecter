@@ -38,7 +38,7 @@ class RedirectIfAuthenticated {
     {
         if ($this->auth->check())
         {
-            return new RedirectResponse('/'.Config::get('lecter.uri'));
+            return new RedirectResponse(route('lecter.index'));
         }
 
         return $next($request);
