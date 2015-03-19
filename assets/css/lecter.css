@@ -96,3 +96,9 @@
 .markdown-editor .preview {
     overflow: hidden;
 }
+
+/* Buttons */
+#save,
+#cancel {
+    display: none;
+}

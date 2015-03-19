@@ -27,14 +27,26 @@ $(document).ready(function() {
             dataType: 'json'
         })
         .done(function(data) {
-
             React.render(
                 React.createElement(MarkdownEditor, {content: $.trim(data['content'])}),
                 document.getElementById('editor-container')
             );
 
             $('#content').hide();
+            $('#edit').hide();
+            $('#cancel').show();
+            $('#save').show();
         });
+
+    }).on('click', '#cancel', function() {
+        $('#content').show();
+        $('#cancel').hide();
+        $('#save').hide();
+        $('#edit').show();
+        $('#editor-container').empty();
+    }).on('click', '#delete', function(){
+
+    }).on('click', '#save', function(){
 
     }).on('click', 'a.ajax', function() {
         ajaxContent($(this).attr('href'));
