@@ -48,6 +48,9 @@ class LecterServiceProvider extends ServiceProvider {
 
         $this->publishes([
             __DIR__.'/../assets/css/' => public_path('css/mrjuliuss/lecter'),
+            __DIR__.'/../assets/jsx/' => public_path('jsx/mrjuliuss/lecter'),
+            __DIR__.'/../assets/js/' => public_path('js/mrjuliuss/lecter'),
+            __DIR__.'/../assets/img/' => public_path('img/mrjuliuss/lecter'),
         ], 'public');
 
         $this->loadViewsFrom(realpath(__DIR__.'/../views'), 'lecter');

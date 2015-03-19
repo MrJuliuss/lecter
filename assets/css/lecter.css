@@ -8,12 +8,23 @@
     border-radius: 0px;
 }
 
+.ajax-loader {
+    display: none;
+    width: 30px;
+    margin-top: 15px;
+    margin-right: 15px;
+}
+
 /* Breadcrumbs */
 .breadcrumb li {
     text-transform: capitalize;
 }
 
 /* Dropdown */
+.dropdown:hover > .dropdown-menu {
+   display: block;
+}
+
 .dropdown-submenu {
     position: relative;
 }
@@ -63,6 +74,25 @@
     text-transform: capitalize;
 }
 
+.panel-default button {
+    margin-right: 10px;
+}
+
 .list-group-item a {
     margin-left: 5px;
+}
+
+
+/* Markdown editor */
+.markdown-editor {
+    height: 650px;
+}
+
+.markdown-editor .raw,
+.markdown-editor .preview {
+    height: 650px;
+}
+
+.markdown-editor .preview {
+    overflow: hidden;
 }

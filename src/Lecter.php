@@ -90,9 +90,24 @@ class Lecter
     {
         $extra = new \ParsedownExtra();
 
-        $content = "";
+        $content = null;
         if(Storage::exists($path) === true) {
             $content = $extra->text(Storage::get($path));
+        }
+
+        return $content;
+    }
+
+    /**
+     * Get the raw page content
+     * @param  string $path file path
+     * @return string
+     */
+    public function getRawPageContent($path)
+    {
+        $content = null;
+        if(Storage::exists($path) === true) {
+            $content = Storage::get($path);
         }
 
         return $content;
