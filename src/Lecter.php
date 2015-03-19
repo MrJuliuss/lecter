@@ -38,15 +38,15 @@ class Lecter
         $filesTree = [];
 
         foreach ($recursiveIteratorIterator as $splFileInfo) {
-               $path = $splFileInfo->isDir()
+            $path = $splFileInfo->isDir()
                  ? array($splFileInfo->getFilename() => [])
                  : array($splFileInfo->getFilename());
 
-           for ($depth = $recursiveIteratorIterator->getDepth() - 1; $depth >= 0; $depth--) {
-               $path = [$recursiveIteratorIterator->getSubIterator($depth)->current()->getFilename() => $path];
-           }
+            for ($depth = $recursiveIteratorIterator->getDepth() - 1; $depth >= 0; $depth--) {
+                $path = [$recursiveIteratorIterator->getSubIterator($depth)->current()->getFilename() => $path];
+            }
 
-           $filesTree = array_merge_recursive($filesTree, $path);
+            $filesTree = array_merge_recursive($filesTree, $path);
         }
 
         return $filesTree;
@@ -62,12 +62,12 @@ class Lecter
         $explodedPath = explode('/', $path);
         $breadcrumbs = [];
 
-        if(!empty($explodedPath)) {
+        if (!empty($explodedPath)) {
             $number = count($explodedPath);
             $link = $prefix;
 
             foreach ($explodedPath as $key => $breadcrumb) {
-                if($breadcrumb !== '') {
+                if ($breadcrumb !== '') {
                     $link .= '/'.$breadcrumb;
                     $breadcrumbs[] = [
                         'name' => explode('.', $breadcrumb)[0],
@@ -91,7 +91,7 @@ class Lecter
         $extra = new \ParsedownExtra();
 
         $content = null;
-        if(Storage::exists($path) === true) {
+        if (Storage::exists($path) === true) {
             $content = $extra->text(Storage::get($path));
         }
 
@@ -106,7 +106,7 @@ class Lecter
     public function getRawPageContent($path)
     {
         $content = null;
-        if(Storage::exists($path) === true) {
+        if (Storage::exists($path) === true) {
             $content = Storage::get($path);
         }
 
@@ -125,16 +125,15 @@ class Lecter
 
         $files = [];
         foreach ($f as $key => $file) {
-    
             $exp = explode('/', $file);
             $name = $exp[count($exp) - 1];
 
             $info = new \SplFileInfo($name);
-            if(!in_array($info->getExtension(), $this->availableExtension)) {
+            if (!in_array($info->getExtension(), $this->availableExtension)) {
                 continue;
             }
 
-            if(isset($exp[0])) {
+            if (isset($exp[0])) {
                 unset($exp[0]);
             }
 
@@ -150,7 +149,7 @@ class Lecter
             $exp = explode('/', $directory);
             $name = $exp[count($exp) - 1];
 
-            if(isset($exp[0])) {
+            if (isset($exp[0])) {
                 unset($exp[0]);
             }
 

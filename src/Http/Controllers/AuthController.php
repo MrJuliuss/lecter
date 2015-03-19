@@ -13,7 +13,8 @@ use Config;
  *
  * @author Julien Richarte <julien.richarte@gmail.com>
  */
-class AuthController extends Controller {
+class AuthController extends Controller
+{
 
     use ValidatesRequests;
 
@@ -61,8 +62,7 @@ class AuthController extends Controller {
 
         $credentials = $request->only('email', 'password');
 
-        if ($this->auth->attempt($credentials, $request->has('remember')))
-        {
+        if ($this->auth->attempt($credentials, $request->has('remember'))) {
             return redirect()->intended('/'.Config::get('lecter.uri'));
         }
 

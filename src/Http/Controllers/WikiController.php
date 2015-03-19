@@ -51,7 +51,7 @@ class WikiController extends Controller
             }
         }
 
-        if($isAjax === true) {
+        if ($isAjax === true) {
             // Ajax request, return content without layout
             $html = view('lecter::controllers.wiki.content', [
                 'files' => $directoryContent['files'],

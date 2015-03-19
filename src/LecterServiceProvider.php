@@ -10,7 +10,8 @@ use Illuminate\Support\ServiceProvider;
  *
  * @author Julien Richarte <julien.richarte@gmail.com>
  */
-class LecterServiceProvider extends ServiceProvider {
+class LecterServiceProvider extends ServiceProvider
+{
 
     /**
      * Bootstrap the application services.
@@ -34,7 +35,6 @@ class LecterServiceProvider extends ServiceProvider {
      */
     public function register()
     {
-
     }
 
     protected function setupPackage()

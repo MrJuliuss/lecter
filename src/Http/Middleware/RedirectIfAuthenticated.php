@@ -7,7 +7,8 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 use Config;
 
-class RedirectIfAuthenticated {
+class RedirectIfAuthenticated
+{
 
     /**
      * The Guard implementation.
@@ -36,8 +37,7 @@ class RedirectIfAuthenticated {
      */
     public function handle($request, Closure $next)
     {
-        if ($this->auth->check())
-        {
+        if ($this->auth->check()) {
             return new RedirectResponse(route('lecter.index'));
         }
 
