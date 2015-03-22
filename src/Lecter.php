@@ -3,6 +3,7 @@
 namespace MrJuliuss\Lecter;
 
 use Illuminate\Support\Facades\Storage;
+use MrJuliuss\Lecter\Exceptions\ContentNotFoundException;
 
 /**
  * This is the Lecter class.
@@ -164,5 +165,19 @@ class Lecter
             'files' => $files,
             'directories' => $directories,
         ];
+    }
+
+    /**
+     * Delete content
+     * @param  string $path path to the content
+     * @return bool || ContentNotFoundException
+     */
+    public function deleteContent($path)
+    {
+        if (Storage::exists($path) === true) {
+            return Storage::delete($path);
+        } else {
+            throw new ContentNotFoundException('The content with path `'.$path.'`does not exists.');
+        }
     }
 }
