@@ -25,8 +25,24 @@
                 <button type="button" class="btn btn-info" id="edit">Edit</button>
                 <button type="button" class="btn btn-primary" id="save">Save</button>
                 <button type="button" class="btn btn-default" id="cancel">Cancel</button>
+
             @endif
             <button type="button" class="btn btn-danger" id="delete" data-toggle="modal" data-target="#delete-modal">Delete</button>
+        </div>
+
+    </div>
+
+
+    <div class="panel panel-default panel-edit">
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="input-title" class="col-lg-1 control-label">Title</label>
+                    <div class="col-lg-4">
+                        <input type="text" class="form-control" id="input-title" placeholder="Title" value="" />
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 

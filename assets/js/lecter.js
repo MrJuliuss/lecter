@@ -17,6 +17,23 @@ var ajaxContent = function(url, callback) {
     });
 };
 
+var editMode = function() {
+    $('#content').hide();
+    $('#edit').hide();
+    $('#cancel').show();
+    $('#save').show();
+    $('.panel-edit').show();
+};
+
+var viewMode = function() {
+    $('#content').show();
+    $('#cancel').hide();
+    $('#save').hide();
+    $('#edit').show();
+    $('.panel-edit').hide();
+    $('#editor-container').empty();
+};
+
 $(document).ajaxStart(function() {
     $('.ajax-loader').show();
 }).ajaxComplete(function() {
@@ -32,24 +49,17 @@ $(document).ready(function() {
         })
         .done(function(data) {
             React.render(
-                React.createElement(MarkdownEditor, {content: $.trim(data['content'])}),
+                React.createElement(MarkdownEditor, {content: $.trim(data.content)}),
                 document.getElementById('editor-container')
             );
 
-            $('#content').hide();
-            $('#edit').hide();
-            $('#cancel').show();
-            $('#save').show();
+            $('#input-title').val(data.title);
+
+            editMode();
         });
 
     }).on('click', '#cancel', function() {
-        $('#content').show();
-        $('#cancel').hide();
-        $('#save').hide();
-        $('#edit').show();
-        $('#editor-container').empty();
-    }).on('click', '#save', function(){
-
+        viewMode();
     }).on('click', 'a.ajax', function() {
         ajaxContent($(this).attr('href'));
 
@@ -70,6 +80,32 @@ $(document).ready(function() {
                 });
             } else {
                 $('#delete-modal').modal('hide');
+                $('#alert-error').show().html(data.message);
+            }
+        });
+    }).on('click', '#save', function(){
+        $.ajax({
+            url: document.location.href,
+            type: 'PUT',
+            dataType: 'json',
+            headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: {
+                'content': $('.markdown-editor textarea').val(),
+                'name': $('#input-title').val()
+            },
+        })
+        .done(function(data) {
+            if(data.success === true) {
+                viewMode();
+                $('#content').html(data.content);
+                $('#alert-success').show().html(data.message);
+
+                if(data.newPath !== '') {
+                    ajaxContent('/'+data.newPath);
+                }
+            } else {
                 $('#alert-error').show().html(data.message);
             }
         });

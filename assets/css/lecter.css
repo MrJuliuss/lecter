@@ -102,3 +102,14 @@
 #cancel {
     display: none;
 }
+
+.panel-edit {
+    display: none;
+    margin-bottom: 20px;
+}
+
+/* form */
+.form-horizontal,
+.form-horizontal .form-group {
+    margin: 0;
+}

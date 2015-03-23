@@ -48,7 +48,10 @@ class WikiController extends Controller
             $content = Lecter::getRawPageContent($any);
 
             if ($isAjax === true) {
-                return response()->json(['content' => $content]);
+                return response()->json([
+                    'content' => $content,
+                    'title' => explode('.', basename($any))[0]
+                ]);
             }
         }
 
@@ -90,14 +93,55 @@ class WikiController extends Controller
             $any = 'wiki/'.$any;
             Lecter::checkContent($any);
             $deleted = Lecter::deleteContent($any);
-            $message = 'Content deleted with success.';
+            $message = 'Page deleted with success.';
         } catch (ContentNotFoundException $e) {
-            $message = 'Content does not exists.';
+            $message = 'The page does not exists.';
         }
 
         return response()->json([
             'success' => $deleted,
             'message' => $message,
+        ]);
+    }
+
+    /**
+     * Update page content
+     * @param  string $any path
+     */
+    public function editPage($any = '')
+    {
+        $content = Request::input('content');
+        $name = Request::input('name');
+        $success = false;
+        $message = '';
+        $newPath = '';
+        $filePath = dirname($any);
+
+        try {
+            $any = 'wiki/'.$any;
+            Lecter::checkContent($any);
+
+            $success = Storage::put($any, $content);
+            $message = 'Page updated with successs.';
+            $content = Lecter::getPageContent($any);
+
+            $oldName = explode('.', basename($any))[0];
+            // rename the markdown file
+            if($oldName !== $name) {
+                Storage::put(dirname($any).'/'.$name.'.md', Lecter::getRawPageContent($any));
+                Storage::delete($any);
+                $newPath = $filePath.'/'.$name.'.md';
+            }
+
+        } catch (Exception $e) {
+            $message = 'The page does not exists.';
+        }
+
+        return response()->json([
+            'success' => $success,
+            'message' => $message,
+            'content' => $content,
+            'newPath' => $newPath
         ]);
     }
 }
