@@ -23,6 +23,7 @@ var editMode = function() {
     $('#cancel').show();
     $('#save').show();
     $('.panel-edit').show();
+    $('#new').hide();
 };
 
 var viewMode = function() {
@@ -32,6 +33,7 @@ var viewMode = function() {
     $('#edit').show();
     $('.panel-edit').hide();
     $('#editor-container').empty();
+    $('#new').show();
 };
 
 $(document).ajaxStart(function() {
