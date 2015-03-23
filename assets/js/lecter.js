@@ -122,9 +122,12 @@ $(document).ready(function() {
     }).on('click', '#new', function() {
         $('.panel-edit').show();
         $('.select-container').show();
+        $('#input-title').empty();
+        $('#edit').hide();
     }).on('click', '#cancel-new', function() {
         $('.panel-edit').hide();
         $('.select-container').hide();
+        $('#edit').show();
     });
 });
 
