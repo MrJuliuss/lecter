@@ -38,7 +38,6 @@ class WikiController extends Controller
         $breadcrumbs = Lecter::getBreadCrumbs($any, $prefix);
 
         $any = 'wiki/'.$any;
-
         $directoryContent = Lecter::getDirectoryContent($any, $prefix);
 
         if (!isset($askRaw)) {
@@ -69,14 +68,13 @@ class WikiController extends Controller
             // Get the navigation bar
             $navBar = Lecter::getNavBar(storage_path().'/app/wiki');
         }
-
         return view('lecter::controllers.wiki.index', [
             'files' => $directoryContent['files'],
             'directories' => $directoryContent['directories'],
             'content' => $content,
             'breadcrumbs' => $breadcrumbs,
             'navBar' => $navBar,
-            'root' => $prefix,
+            'root' => $prefix
         ]);
     }
 
@@ -121,18 +119,26 @@ class WikiController extends Controller
             $any = 'wiki/'.$any;
             Lecter::checkContent($any);
 
-            $success = Storage::put($any, $content);
-            $message = 'Page updated with successs.';
-            $content = Lecter::getPageContent($any);
+            $isFile = is_file(storage_path().'/app/'.$any);
 
-            $oldName = explode('.', basename($any))[0];
-            // rename the markdown file
-            if($oldName !== $name) {
-                Storage::put(dirname($any).'/'.$name.'.md', Lecter::getRawPageContent($any));
-                Storage::delete($any);
-                $newPath = $filePath.'/'.$name.'.md';
+            if($isFile) {
+                $success = Storage::put($any, $content);
+                $content = Lecter::getPageContent($any);
+
+                $oldName = explode('.', basename($any))[0];
+                // rename the markdown file
+                if($oldName !== $name) {
+                    Storage::put(dirname($any).'/'.$name.'.md', Lecter::getRawPageContent($any));
+                    $newPath = $filePath.'/'.$name.'.md';
+                    Storage::delete($any);
+                }
+            } else {
+                $success = Storage::makeDirectory(dirname($any).'/'.$name);
+                Storage::deleteDirectory($any);
+                $newPath = $filePath.'/'.$name;
             }
 
+            $message = 'Page updated with successs.';
         } catch (Exception $e) {
             $message = 'The page does not exists.';
         }

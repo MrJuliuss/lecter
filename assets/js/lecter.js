@@ -83,7 +83,7 @@ $(document).ready(function() {
                 $('#alert-error').show().html(data.message);
             }
         });
-    }).on('click', '#save', function(){
+    }).on('click', '#save', function() {
         $.ajax({
             url: document.location.href,
             type: 'PUT',
@@ -100,11 +100,17 @@ $(document).ready(function() {
             if(data.success === true) {
                 viewMode();
                 $('#content').html(data.content);
-                $('#alert-success').show().html(data.message);
+
+                callback = function() {
+                    $('#alert-success').show().html(data.message);
+                }
 
                 if(data.newPath !== '') {
-                    ajaxContent('/'+data.newPath);
+                    ajaxContent('/'+data.newPath, callback);
+                } else {
+                    callback();
                 }
+
             } else {
                 $('#alert-error').show().html(data.message);
             }
