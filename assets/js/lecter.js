@@ -1,4 +1,4 @@
-var ajaxContent = function(url) {
+var ajaxContent = function(url, callback) {
     $.ajax({
         url: url,
         type: 'GET',
@@ -9,6 +9,10 @@ var ajaxContent = function(url) {
 
         if(typeof url !== "undefined" && url != window.location) {
             window.history.pushState(data, '', this.url);
+        }
+
+        if(typeof callback !== 'undefined') {
+            callback();
         }
     });
 };
@@ -44,14 +48,31 @@ $(document).ready(function() {
         $('#save').hide();
         $('#edit').show();
         $('#editor-container').empty();
-    }).on('click', '#delete', function(){
-
     }).on('click', '#save', function(){
 
     }).on('click', 'a.ajax', function() {
         ajaxContent($(this).attr('href'));
 
         return false;
+    }).on('click', '#delete-content', function() {
+        $.ajax({
+            url: document.location.href,
+            type: 'DELETE',
+            dataType: 'json',
+            headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        })
+        .done(function(data) {
+            if(data.success === true) {
+                ajaxContent('/', function(){
+                    $('#alert-success').show().html(data.message);
+                });
+            } else {
+                $('#delete-modal').modal('hide');
+                $('#alert-error').show().html(data.message);
+            }
+        });
     });
 });
 

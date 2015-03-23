@@ -13,11 +13,16 @@
     @endforeach
 </ol>
 
-@if($content != null && Config::get('lecter.private') == true)
+<div class="alert alert-success" id="alert-success" role="alert" style="display: none;"></div>
+<div class="alert alert-danger" id="alert-error" role="alert" style="display: none;"></div>
+
+@if(Config::get('lecter.private') == true)
+    @include('lecter::partials.modals.delete')
+
     <div class="panel panel-default">
         <div class="panel-body">
             <button type="button" class="btn btn-info" id="edit">Edit</button>
-            <button type="button" class="btn btn-danger" id="delete">Delete</button>
+            <button type="button" class="btn btn-danger" id="delete" data-toggle="modal" data-target="#delete-modal">Delete</button>
             <button type="button" class="btn btn-default" id="cancel">Cancel</button>
             <button type="button" class="btn btn-primary" id="save">Save</button>
         </div>
@@ -26,7 +31,7 @@
     <div id="editor-container"></div>
 @endif
 
-@if($content === '' && !empty($files))
+@if($content === '' && !empty($files) || !(empty($directories)))
     <div class="panel panel-default">
         <ul class="list-group">
             @foreach($files as $file)

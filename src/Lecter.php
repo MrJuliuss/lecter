@@ -168,16 +168,27 @@ class Lecter
     }
 
     /**
+     * Check if content exists
+     * @param  string $path content path
+     */
+    public function checkContent($path)
+    {
+        if (Storage::exists($path) === false) {
+            throw new ContentNotFoundException('The content with path `'.$path.'`does not exists.');
+        }
+    }
+
+    /**
      * Delete content
      * @param  string $path path to the content
-     * @return bool || ContentNotFoundException
+     * @return bool
      */
     public function deleteContent($path)
     {
-        if (Storage::exists($path) === true) {
+        if (is_file($path)) {
             return Storage::delete($path);
-        } else {
-            throw new ContentNotFoundException('The content with path `'.$path.'`does not exists.');
         }
+
+        return Storage::deleteDirectory($path);
     }
 }

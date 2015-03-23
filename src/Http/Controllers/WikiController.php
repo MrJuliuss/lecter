@@ -3,8 +3,9 @@
 namespace MrJuliuss\Lecter\Http\Controllers;
 
 use Illuminate\Routing\Controller;
-use MrJuliuss\Lecter\Facades\Lecter;
 use Illuminate\Support\Facades\Storage;
+use MrJuliuss\Lecter\Facades\Lecter;
+use MrJuliuss\Lecter\Exception\ContentNotFoundException;
 use Config;
 use Request;
 
@@ -15,10 +16,10 @@ use Request;
  */
 class WikiController extends Controller
 {
+
     /**
-     * Redirect to the main page.
-     *
-     * @return \Illuminate\Http\Response
+     * Get wiki content
+     * @param  string $any wiki page path
      */
     public function getIndex($any = '')
     {
@@ -73,6 +74,30 @@ class WikiController extends Controller
             'breadcrumbs' => $breadcrumbs,
             'navBar' => $navBar,
             'root' => $prefix,
+        ]);
+    }
+
+    /**
+     * Delete content
+     * @param  string $any path
+     */
+    public function deletePage($any = '')
+    {
+        $deleted = false;
+        $message = '';
+
+        try {
+            $any = 'wiki/'.$any;
+            Lecter::checkContent($any);
+            $deleted = Lecter::deleteContent($any);
+            $message = 'Content deleted with success.';
+        } catch (ContentNotFoundException $e) {
+            $message = 'Content does not exists.';
+        }
+
+        return response()->json([
+            'success' => $deleted,
+            'message' => $message,
         ]);
     }
 }
