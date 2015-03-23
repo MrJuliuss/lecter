@@ -21,10 +21,12 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-            <button type="button" class="btn btn-info" id="edit">Edit</button>
+            @if($content !== "")
+                <button type="button" class="btn btn-info" id="edit">Edit</button>
+                <button type="button" class="btn btn-primary" id="save">Save</button>
+                <button type="button" class="btn btn-default" id="cancel">Cancel</button>
+            @endif
             <button type="button" class="btn btn-danger" id="delete" data-toggle="modal" data-target="#delete-modal">Delete</button>
-            <button type="button" class="btn btn-default" id="cancel">Cancel</button>
-            <button type="button" class="btn btn-primary" id="save">Save</button>
         </div>
     </div>
 
