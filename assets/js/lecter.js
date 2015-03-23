@@ -55,6 +55,10 @@ $(document).ready(function() {
 
             $('#input-title').val(data.title);
 
+            if(data.isFile === true) {
+                $('#editor-container').show();
+            }
+
             editMode();
         });
 
@@ -115,6 +119,12 @@ $(document).ready(function() {
                 $('#alert-error').show().html(data.message);
             }
         });
+    }).on('click', '#new', function() {
+        $('.panel-edit').show();
+        $('.select-container').show();
+    }).on('click', '#cancel-new', function() {
+        $('.panel-edit').hide();
+        $('.select-container').hide();
     });
 });
 

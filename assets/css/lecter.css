@@ -97,6 +97,10 @@
     overflow: hidden;
 }
 
+#editor-container {
+    display: none;
+}
+
 /* Buttons */
 #save,
 #cancel {

@@ -26,6 +26,8 @@ class WikiController extends Controller
         $isAjax = Request::ajax();
         $askRaw = Request::input('raw');
 
+        $notOnIndex = $any !== '';
+
         // Wiki prefix uri
         $prefix = Config::get('lecter.uri');
 
@@ -47,20 +49,25 @@ class WikiController extends Controller
             $content = Lecter::getRawPageContent($any);
 
             if ($isAjax === true) {
+                $isFile = is_file(storage_path().'/app/'.$any);
+
                 return response()->json([
                     'content' => $content,
-                    'title' => explode('.', basename($any))[0]
+                    'title' => explode('.', basename($any))[0],
+                    'isFile' => $isFile
                 ]);
             }
         }
 
         if ($isAjax === true) {
+
             // Ajax request, return content without layout
             $html = view('lecter::controllers.wiki.content', [
                 'files' => $directoryContent['files'],
                 'directories' => $directoryContent['directories'],
                 'content' => $content,
-                'breadcrumbs' => $breadcrumbs
+                'breadcrumbs' => $breadcrumbs,
+                'notOnIndex' => $notOnIndex,
             ])->render();
 
             return response()->json(['html' => $html]);
@@ -68,13 +75,15 @@ class WikiController extends Controller
             // Get the navigation bar
             $navBar = Lecter::getNavBar(storage_path().'/app/wiki');
         }
+
         return view('lecter::controllers.wiki.index', [
             'files' => $directoryContent['files'],
             'directories' => $directoryContent['directories'],
             'content' => $content,
             'breadcrumbs' => $breadcrumbs,
             'navBar' => $navBar,
-            'root' => $prefix
+            'root' => $prefix,
+            'notOnIndex' => $notOnIndex
         ]);
     }
 
@@ -133,8 +142,7 @@ class WikiController extends Controller
                     Storage::delete($any);
                 }
             } else {
-                $success = Storage::makeDirectory(dirname($any).'/'.$name);
-                Storage::deleteDirectory($any);
+                $success = rename(storage_path().'/app/'.$any, storage_path().'/app/'.dirname($any).'/'.$name);
                 $newPath = $filePath.'/'.$name;
             }
 
