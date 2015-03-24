@@ -21,7 +21,9 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
+            @if($isFile === false)
             <button type="button" class="btn btn-info" id="new">New</button>
+            @endif
             <button type="button" class="btn btn-primary" id="save">Save</button>
             <button type="button" class="btn btn-default" id="cancel">Cancel</button>
             @if($notOnIndex)

@@ -179,6 +179,40 @@ class Lecter
     }
 
     /**
+     * Check if a directory or a file already exists in the current directory
+     * @param  string $name file or directory name
+     * @param  string $path current directory path
+     * @param  string $type search a file or a directory
+     * @return bool
+     */
+    public function checkIfPageExists($name, $path, $type = 'file')
+    {
+        if ($type === 'file') {
+            $files = Storage::files($path);
+            foreach ($files as $file) {
+                $explodeFilePath = explode('/', $file);
+                $fileName = explode('.', $explodeFilePath[count($explodeFilePath) - 1])[0];
+
+                if ($name === $fileName) {
+                    return true;
+                }
+            }
+        } else {
+            $directories = Storage::directories($path);
+            foreach ($directories as $directory) {
+                $explodeFilePath = explode('/', $directory);
+                $fileName = $explodeFilePath[count($explodeFilePath) - 1];
+
+                if ($name === $fileName) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Delete content
      * @param  string $path path to the content
      * @return bool

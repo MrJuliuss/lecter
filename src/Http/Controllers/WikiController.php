@@ -40,6 +40,8 @@ class WikiController extends Controller
         $breadcrumbs = Lecter::getBreadCrumbs($any, $prefix);
 
         $any = 'wiki/'.$any;
+
+        $isFile = is_file(storage_path().'/app/'.$any);
         $directoryContent = Lecter::getDirectoryContent($any, $prefix);
 
         if (!isset($askRaw)) {
@@ -68,6 +70,7 @@ class WikiController extends Controller
                 'content' => $content,
                 'breadcrumbs' => $breadcrumbs,
                 'notOnIndex' => $notOnIndex,
+                'isFile' => $isFile
             ])->render();
 
             return response()->json(['html' => $html]);
@@ -83,7 +86,8 @@ class WikiController extends Controller
             'breadcrumbs' => $breadcrumbs,
             'navBar' => $navBar,
             'root' => $prefix,
-            'notOnIndex' => $notOnIndex
+            'notOnIndex' => $notOnIndex,
+            'isFile' => $isFile
         ]);
     }
 
@@ -129,24 +133,39 @@ class WikiController extends Controller
             Lecter::checkContent($any);
 
             $isFile = is_file(storage_path().'/app/'.$any);
+            $currentDirectoryPath = dirname($any);
 
-            if($isFile) {
+            if ($isFile) {
                 $success = Storage::put($any, $content);
                 $content = Lecter::getPageContent($any);
 
                 $oldName = explode('.', basename($any))[0];
+
+                $fileExists = Lecter::checkIfPageExists($name, $currentDirectoryPath, 'file');
+
                 // rename the markdown file
-                if($oldName !== $name) {
-                    Storage::put(dirname($any).'/'.$name.'.md', Lecter::getRawPageContent($any));
-                    $newPath = $filePath.'/'.$name.'.md';
-                    Storage::delete($any);
+                if ($oldName !== $name) {
+                    if ($fileExists === false) {
+                        Storage::put($currentDirectoryPath.'/'.$name.'.md', Lecter::getRawPageContent($any));
+                        $newPath = $filePath.'/'.$name.'.md';
+                        Storage::delete($any);
+                        $message = 'Page updated with successs.';
+                    } else {
+                        $success = false;
+                        $message = "A page with this name already exists.";
+                    }
                 }
             } else {
-                $success = rename(storage_path().'/app/'.$any, storage_path().'/app/'.dirname($any).'/'.$name);
-                $newPath = $filePath.'/'.$name;
+                $directoryExists = Lecter::checkIfPageExists($name, $currentDirectoryPath, 'directory');
+                if ($directoryExists === false) {
+                    $success = rename(storage_path().'/app/'.$any, storage_path().'/app/'.$currentDirectoryPath.'/'.$name);
+                    $newPath = $filePath.'/'.$name;
+                    $message = 'Page updated with successs.';
+                } else {
+                    $success = false;
+                    $message = "A page with this name already exists.";
+                }
             }
-
-            $message = 'Page updated with successs.';
         } catch (Exception $e) {
             $message = 'The page does not exists.';
         }
