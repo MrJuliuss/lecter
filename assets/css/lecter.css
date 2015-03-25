@@ -114,6 +114,6 @@
 
 /* form */
 .form-horizontal,
-.form-horizontal .form-group {
+.panel-edit .form-horizontal .form-group {
     margin: 0;
 }
