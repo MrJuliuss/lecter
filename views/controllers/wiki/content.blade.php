@@ -4,8 +4,7 @@
     </li>
     @foreach($breadcrumbs as $breadcrumb)
         <li class="{{ $breadcrumb['active'] == true ? 'active' : '' }}">
-            @if($breadcrumb['active'] === true)
-                {{ $breadcrumb['name'] }}
+            @if($breadcrumb['active'] === true) {{ $breadcrumb['name'] }}
             @else
                 <a class="ajax" href="{{ url($breadcrumb['link']) }}">{{ $breadcrumb['name'] }}</a>
             @endif
@@ -49,8 +48,8 @@
                         <label for="select-type" class="col-lg-1 control-label">Type</label>
                         <div class="col-lg-2">
                             <select class="form-control" id="select-type">
-                                <option>File</option>
-                                <option>Directory</option>
+                                <option value="file">File</option>
+                                <option value="dir">Directory</option>
                             </select>
                         </div>
 

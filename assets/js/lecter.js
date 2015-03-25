@@ -130,6 +130,34 @@ $(document).ready(function() {
         $('.panel-edit').hide();
         $('.select-container').hide();
         $('#edit').show();
+    }).on('click', '#add', function() {
+        $.ajax({
+            url: document.location.href,
+            type: 'POST',
+            dataType: 'json',
+            headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: {
+                'name': $('#input-title').val(),
+                'type': $('#select-type').val(),
+            },
+        })
+        .done(function(data) {
+            if(data.success === true) {
+                callback = function() {
+                    $('#alert-success').show().html(data.message);
+                }
+
+                if(data.newPath !== '') {
+                    ajaxContent('/'+data.newPath, callback);
+                } else {
+                    callback();
+                }
+            } else {
+                $('#alert-error').show().html(data.message);
+            }
+        });
     });
 });
 

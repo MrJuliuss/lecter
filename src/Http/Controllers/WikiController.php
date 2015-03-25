@@ -177,4 +177,51 @@ class WikiController extends Controller
             'newPath' => $newPath
         ]);
     }
+
+    /**
+     * Add a page
+     * @param string $any current directory path
+     */
+    public function addPage($any = '')
+    {
+        $name = Request::input('name');
+        $type = Request::input('type');
+
+        if (empty($name)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Title cannot be empty.',
+            ]);
+        }
+
+        $newPath = $any;
+        $any = 'wiki/'.$any;
+        if ($type === 'file') {
+            $exists = Lecter::checkIfPageExists($name, $any, 'file');
+
+            if ($exists === false) {
+                $success = Storage::put($any.'/'.$name.'.md', 'test');
+                $message = 'Page created with success.';
+            } else {
+                $success = false;
+                $message = 'A page with this name already exists';
+            }
+        } else {
+            $exists = Lecter::checkIfPageExists($name, $any, 'directory');
+
+            if ($exists === false) {
+                $success = Storage::makeDirectory($any.'/'.$name);
+                $message = 'Page created with success.';
+            } else {
+                $success = false;
+                $message = 'A page with this name already exists.';
+            }
+        }
+
+        return response()->json([
+            'success' => $success,
+            'message' => $message,
+            'newPath' => $newPath
+        ]);
+    }
 }
