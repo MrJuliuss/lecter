@@ -23,36 +23,28 @@ class WikiController extends Controller
      */
     public function getIndex($any = '')
     {
-        $isAjax = Request::ajax();
-        $askRaw = Request::input('raw');
-
-        $notOnIndex = $any !== '';
-
-        // Wiki prefix uri
-        $prefix = Config::get('lecter.uri');
-
         // Create the wiki content directory if it does not exists
         if (Storage::exists('wiki') === false) {
             Storage::makeDirectory('wiki');
         }
 
+        $isAjax = Request::ajax();
+        $askRaw = Request::input('raw');
+
+        // Wiki prefix uri
+        $prefix = Config::get('lecter.uri');
+
         // Get the breadcrumbs
         $breadcrumbs = Lecter::getBreadCrumbs($any, $prefix);
 
         $any = 'wiki/'.$any;
-
+        $notOnIndex = $any !== '';
         $isFile = is_file(storage_path().'/app/'.$any);
-        $directoryContent = Lecter::getDirectoryContent($any, $prefix);
 
-        if (!isset($askRaw)) {
-            // Get html formatted content
-            $content = Lecter::getPageContent($any);
-        } else {
+        if (isset($askRaw) && $isFile) {
             $content = Lecter::getRawPageContent($any);
 
             if ($isAjax === true) {
-                $isFile = is_file(storage_path().'/app/'.$any);
-
                 return response()->json([
                     'content' => $content,
                     'title' => explode('.', basename($any))[0],
@@ -61,8 +53,11 @@ class WikiController extends Controller
             }
         }
 
-        if ($isAjax === true) {
+        // Get html formatted content
+        $content = Lecter::getPageContent($any);
+        $directoryContent = Lecter::getDirectoryContent($any, $prefix);
 
+        if ($isAjax === true) {
             // Ajax request, return content without layout
             $html = view('lecter::controllers.wiki.content', [
                 'files' => $directoryContent['files'],
@@ -98,10 +93,9 @@ class WikiController extends Controller
     public function deletePage($any = '')
     {
         $deleted = false;
-        $message = '';
+        $any = 'wiki/'.$any;
 
         try {
-            $any = 'wiki/'.$any;
             Lecter::checkContent($any);
             $deleted = Lecter::deleteContent($any);
             $message = 'Page deleted with success.';
