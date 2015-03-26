@@ -5,7 +5,6 @@ namespace MrJuliuss\Lecter\Http\Middleware;
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
-use Config;
 
 class RedirectIfAuthenticated
 {
@@ -21,7 +20,6 @@ class RedirectIfAuthenticated
      * Create a new filter instance.
      *
      * @param  Guard  $auth
-     * @return void
      */
     public function __construct(Guard $auth)
     {

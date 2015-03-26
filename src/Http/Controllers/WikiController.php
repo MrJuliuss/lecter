@@ -5,7 +5,7 @@ namespace MrJuliuss\Lecter\Http\Controllers;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Storage;
 use MrJuliuss\Lecter\Facades\Lecter;
-use MrJuliuss\Lecter\Exception\ContentNotFoundException;
+use MrJuliuss\Lecter\Exceptions\ContentNotFoundException;
 use Config;
 use Request;
 
@@ -37,8 +37,8 @@ class WikiController extends Controller
         // Get the breadcrumbs
         $breadcrumbs = Lecter::getBreadCrumbs($any, $prefix);
 
-        $any = 'wiki/'.$any;
         $notOnIndex = $any !== '';
+        $any = 'wiki/'.$any;
         $isFile = is_file(storage_path().'/app/'.$any);
 
         if (isset($askRaw) && $isFile) {
@@ -118,7 +118,6 @@ class WikiController extends Controller
         $content = Request::input('content');
         $name = Request::input('name');
         $success = false;
-        $message = '';
         $newPath = '';
         $filePath = dirname($any);
 
@@ -129,38 +128,37 @@ class WikiController extends Controller
             $isFile = is_file(storage_path().'/app/'.$any);
             $currentDirectoryPath = dirname($any);
 
-            if ($isFile) {
-                $success = Storage::put($any, $content);
-                $content = Lecter::getPageContent($any);
-
+            $pageExists = Lecter::checkIfPageExists($name, $currentDirectoryPath, $isFile ? 'file' : 'dir');
+            if ($isFile === true) {
                 $oldName = explode('.', basename($any))[0];
-
-                $fileExists = Lecter::checkIfPageExists($name, $currentDirectoryPath, 'file');
-
-                // rename the markdown file
-                if ($oldName !== $name) {
-                    if ($fileExists === false) {
-                        Storage::put($currentDirectoryPath.'/'.$name.'.md', Lecter::getRawPageContent($any));
-                        $newPath = $filePath.'/'.$name.'.md';
-                        Storage::delete($any);
-                        $message = 'Page updated with successs.';
-                    } else {
-                        $success = false;
-                        $message = "A page with this name already exists.";
-                    }
-                }
             } else {
-                $directoryExists = Lecter::checkIfPageExists($name, $currentDirectoryPath, 'directory');
-                if ($directoryExists === false) {
+                $explode = explode('/', $any);
+                $oldName = $explode[count($explode) - 1];
+            }
+
+            if ($oldName !== $name && $pageExists === true) {
+                $message = "A page with this name already exists.";
+            } else {
+                if ($isFile) {
+                    // rename the markdown file
+                    if ($oldName !== $name) {
+                        Storage::put($currentDirectoryPath.'/'.$name.'.md', Lecter::getRawPageContent($any));
+                        Storage::delete($any);
+                        $any = $newPath = $filePath.'/'.$name.'.md';
+                    } else {
+                        Storage::put($any, $content);
+                    }
+
+                    $success = true;
+                    $content = Lecter::getPageContent($any);
+                    $message = 'Page updated with successs.';
+                } else {
                     $success = rename(storage_path().'/app/'.$any, storage_path().'/app/'.$currentDirectoryPath.'/'.$name);
                     $newPath = $filePath.'/'.$name;
                     $message = 'Page updated with successs.';
-                } else {
-                    $success = false;
-                    $message = "A page with this name already exists.";
                 }
             }
-        } catch (Exception $e) {
+        } catch (ContentNotFoundException $e) {
             $message = 'The page does not exists.';
         }
 
@@ -181,35 +179,31 @@ class WikiController extends Controller
         $name = Request::input('name');
         $type = Request::input('type');
 
+        $success = false;
+
         if (empty($name)) {
             return response()->json([
-                'success' => false,
+                'success' => $success,
                 'message' => 'Title cannot be empty.',
             ]);
         }
 
-        $newPath = $any;
+        $newPath = $any !== '/' ? $any : '';
         $any = 'wiki/'.$any;
-        if ($type === 'file') {
-            $exists = Lecter::checkIfPageExists($name, $any, 'file');
+        $exists = Lecter::checkIfPageExists($name, $any, $type);
 
-            if ($exists === false) {
-                $success = Storage::put($any.'/'.$name.'.md', 'test');
-                $message = 'Page created with success.';
+        if ($exists === false) {
+            if ($type === 'file') {
+                $success = Storage::put($any.'/'.$name.'.md', '');
             } else {
-                $success = false;
-                $message = 'A page with this name already exists';
+                $success = Storage::makeDirectory($any.'/'.$name);
             }
         } else {
-            $exists = Lecter::checkIfPageExists($name, $any, 'directory');
+            $message = 'A page with this name already exists';
+        }
 
-            if ($exists === false) {
-                $success = Storage::makeDirectory($any.'/'.$name);
-                $message = 'Page created with success.';
-            } else {
-                $success = false;
-                $message = 'A page with this name already exists.';
-            }
+        if ($success === true) {
+            $message = 'Page created with success.';
         }
 
         return response()->json([

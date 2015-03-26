@@ -107,9 +107,9 @@ $(document).ready(function() {
                 viewMode();
                 $('#content').html(data.content);
 
-                callback = function() {
+                var callback = function() {
                     $('#alert-success').show().html(data.message);
-                }
+                };
 
                 if(data.newPath !== '') {
                     ajaxContent('/'+data.newPath, callback);
@@ -149,11 +149,7 @@ $(document).ready(function() {
                     $('#alert-success').show().html(data.message);
                 }
 
-                if(data.newPath !== '') {
-                    ajaxContent('/'+data.newPath, callback);
-                } else {
-                    callback();
-                }
+                ajaxContent('/'+data.newPath, callback);
             } else {
                 $('#alert-error').show().html(data.message);
             }
