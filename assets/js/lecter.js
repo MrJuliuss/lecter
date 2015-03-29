@@ -11,6 +11,10 @@ var ajaxContent = function(url, callback) {
             window.history.pushState(data, '', this.url);
         }
 
+        if(data.navBarView !== null) {
+            $('#navigation').empty().html(data.navBarView);
+        }
+
         if(typeof callback !== 'undefined') {
             callback();
         }
@@ -81,7 +85,7 @@ $(document).ready(function() {
         })
         .done(function(data) {
             if(data.success === true) {
-                ajaxContent('/', function(){
+                ajaxContent('/?nav=1', function(){
                     $('#alert-success').show().html(data.message);
                 });
             } else {
@@ -112,7 +116,7 @@ $(document).ready(function() {
                 };
 
                 if(data.newPath !== '') {
-                    ajaxContent('/'+data.newPath, callback);
+                    ajaxContent('/'+data.newPath+'?nav=1', callback);
                 } else {
                     callback();
                 }
@@ -149,7 +153,7 @@ $(document).ready(function() {
                     $('#alert-success').show().html(data.message);
                 }
 
-                ajaxContent('/'+data.newPath, callback);
+                ajaxContent('/'+data.newPath+'?nav=1', callback);
             } else {
                 $('#alert-error').show().html(data.message);
             }

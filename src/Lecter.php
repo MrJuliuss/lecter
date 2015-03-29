@@ -219,7 +219,7 @@ class Lecter
      */
     public function deleteContent($path)
     {
-        if (is_file($path)) {
+        if (is_file(storage_path().'/app/'.$path)) {
             return Storage::delete($path);
         }
 

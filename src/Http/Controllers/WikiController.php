@@ -30,6 +30,7 @@ class WikiController extends Controller
 
         $isAjax = Request::ajax();
         $askRaw = Request::input('raw');
+        $refreshNavBar = Request::input('nav');
 
         // Wiki prefix uri
         $prefix = Config::get('lecter.uri');
@@ -57,6 +58,7 @@ class WikiController extends Controller
         $content = Lecter::getPageContent($any);
         $directoryContent = Lecter::getDirectoryContent($any, $prefix);
 
+
         if ($isAjax === true) {
             // Ajax request, return content without layout
             $html = view('lecter::controllers.wiki.content', [
@@ -68,9 +70,20 @@ class WikiController extends Controller
                 'isFile' => $isFile
             ])->render();
 
-            return response()->json(['html' => $html]);
+            $navBarView = null;
+            if (isset($refreshNavBar)) {
+                $navBar = Lecter::getNavBar(storage_path().'/app/wiki');
+                $navBarView = view('lecter::partials.nav', [
+                    'navBar' => $navBar,
+                    'root' => $prefix
+                ])->render();
+            }
+
+            return response()->json([
+                'html' => $html,
+                'navBarView' => $navBarView,
+            ]);
         } else {
-            // Get the navigation bar
             $navBar = Lecter::getNavBar(storage_path().'/app/wiki');
         }
 

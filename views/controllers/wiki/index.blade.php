@@ -13,7 +13,7 @@
     </div>
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav multi-level">
+        <ul id="navigation" class="nav navbar-nav multi-level">
             @include('lecter::partials.nav', ['navBar' => $navBar, 'root' => $root])
         </ul>
 
