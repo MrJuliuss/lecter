@@ -15,5 +15,5 @@ return [
     /**
      * Wiki is private (authentication)
      */
-    'private' => true,
+    'private' => false,
 ];
