@@ -10,6 +10,7 @@
         }
     ],
     "require": {
+        "php": ">=5.5",
         "erusev/parsedown-extra": "~0.6"
     },
     "autoload": {
@@ -21,5 +22,7 @@
         "branch-alias": {
             "dev-master": "0.1-dev"
         }
-    }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
