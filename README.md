@@ -12,7 +12,7 @@ To get the latest version on Lecter, add the follow line to the require block of
 
 Launch `composer install` or `composer update`.
 
-Open your `app/config.php` and add the following to the `providers` key :
+Open your `config/app.php` and add the following to the `providers` key :
 
 `'MrJuliuss\Lecter\LecterServiceProvider'`
 
