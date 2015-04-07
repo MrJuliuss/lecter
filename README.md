@@ -2,6 +2,8 @@
 
 A flat file wiki built with Laravel 5 and Bootstrap 3.
 
+<img src="https://raw.githubusercontent.com/MrJuliuss/lecter/master/screenshot.png"/>
+
 ## Install
 
 PHP 5.5+ and Composer are required.
@@ -28,7 +30,20 @@ Go to your app url.
 
 ## Config
 
-Coming soon
+Lecter has 2 modes:
+
+- Public mode:
+
+Everybody can see the wiki, and you need to modify directly the markdown files. In `config/lecter.php` set the `private` key to `false`.
+
+- Private mode:
+
+Lecter can be a light private wiki build with the basic Laravel 5 authentication system.
+
+Just run `php artisan migrate` to add the basic users table in your databases if doesn't exists. (If you did a `php artisan fresh` before, the migration will not exists)
+
+In `config/lecter.php` set the `private` key to `false`.
+
 
 ## License
 
