@@ -44,6 +44,15 @@ Just run `php artisan migrate` to add the basic users table in your databases if
 
 In `config/lecter.php` set the `private` key to `false`.
 
+#### App name :
+
+In `config/lecter.php` change `app_name` key to set the app name.
+
+#### Lecter location :
+
+Lecter is by default available to `http://your.app`. To change the location of lecter, set the `uri`.
+
+Example : with `uri` setted to `mywiki`, Lecter is available to `http://your.app/mywiki/`
 
 ## License
 
