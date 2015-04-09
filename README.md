@@ -2,6 +2,8 @@
 
 A flat file wiki built with Laravel 5 and Bootstrap 3.
 
+This repository just contains the Laravel 5 package. You can get a full Lecter Laravel 5 app here : https://github.com/MrJuliuss/lecter-app
+
 <img src="https://raw.githubusercontent.com/MrJuliuss/lecter/master/screenshot.png"/>
 
 ## Install
