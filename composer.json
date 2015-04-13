@@ -16,7 +16,10 @@
     "autoload": {
         "psr-4": {
             "MrJuliuss\\Lecter\\": "src/"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "extra": {
         "branch-alias": {
