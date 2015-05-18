@@ -35,6 +35,7 @@ class LecterServiceProvider extends ServiceProvider
      */
     public function register()
     {
+
     }
 
     protected function setupPackage()

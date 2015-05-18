@@ -17,6 +17,6 @@ $router->group($groupConfig, function ($router) {
     if (Config::get('lecter.private')) {
         $router->delete('{any}', ['as' => 'lecter.delete-content', 'uses' => 'WikiController@deletePage'])->where('any', '.*');
         $router->put('{any}', ['as' => 'lecter.update-content', 'uses' => 'WikiController@editPage'])->where('any', '.*');
-        $router->post('{any}', ['as' => 'lecter.update-content', 'uses' => 'WikiController@addPage'])->where('any', '.*');
+        $router->post('{any?}', ['as' => 'lecter.add-content', 'uses' => 'WikiController@addPage'])->where('any', '.*');
     }
 });

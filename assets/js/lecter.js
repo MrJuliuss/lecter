@@ -85,7 +85,7 @@ $(document).ready(function() {
         })
         .done(function(data) {
             if(data.success === true) {
-                ajaxContent('/?nav=1', function(){
+                ajaxContent(prefixUrl+'/?nav=1', function(){
                     $('#alert-success').show().html(data.message);
                 });
             } else {
@@ -116,7 +116,7 @@ $(document).ready(function() {
                 };
 
                 if(data.newPath !== '') {
-                    ajaxContent('/'+data.newPath+'?nav=1', callback);
+                    ajaxContent(prefixUrl+'/'+data.newPath+'?nav=1', callback);
                 } else {
                     callback();
                 }
@@ -153,7 +153,7 @@ $(document).ready(function() {
                     $('#alert-success').show().html(data.message);
                 }
 
-                ajaxContent('/'+data.newPath+'?nav=1', callback);
+                ajaxContent(prefixUrl+'/'+data.newPath+'?nav=1', callback);
             } else {
                 $('#alert-error').show().html(data.message);
             }
