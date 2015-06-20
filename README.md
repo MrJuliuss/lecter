@@ -42,7 +42,7 @@ Lecter can be a light private wiki build with the basic Laravel 5 authentication
 
 Just run `php artisan migrate` to add the basic users table in your databases if doesn't exists. (If you did a `php artisan fresh` before, the migration will not exists)
 
-In `config/lecter.php` set the `private` key to `false`.
+In `config/lecter.php` set the `private` key to `true`.
 
 #### App name :
 
